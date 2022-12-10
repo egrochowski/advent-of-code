@@ -26,7 +26,6 @@ function isSameRow(headRow, tailRow) { return !getRowDifference(headRow, tailRow
 function isSameCol(headCol, tailCol) { return !getColDifference(headCol, tailCol); }
 
 function getDistance([x1, y1], [x2, y2]) {
-    // return Math.sqrt( ((x2-x1)**2) + ((y2-y1)**2) )
     return Math.max(getRowDifference(x1, x2), getColDifference(y1, y2));
 }
 
