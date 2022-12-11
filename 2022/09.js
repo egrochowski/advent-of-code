@@ -1,19 +1,8 @@
 let { input } = require("./input/09");
 
-let test = `
-R 4
-U 4
-L 3
-D 1
-R 4
-D 1
-L 5
-R 2
-`
-
-
-// Head and Tail start from same position
 function parseInput(input) { return input.trim().split("\n"); }
+
+function generateKnots(n) { return Array.from(Array(n), () => [0,0]); }
 
 function serialize(tail) { return tail.join('.'); } 
 
@@ -25,12 +14,10 @@ function isSameRow(headRow, tailRow) { return !getRowDifference(headRow, tailRow
 
 function isSameCol(headCol, tailCol) { return !getColDifference(headCol, tailCol); }
 
+function isLessThanTwoSteps(head, tail) { return getDistance(head, tail) < 2; }
+
 function getDistance([x1, y1], [x2, y2]) {
     return Math.max(getRowDifference(x1, x2), getColDifference(y1, y2));
-}
-
-function isLessThanTwoSteps(head, tail) {
-    return getDistance(head, tail) < 2; 
 }
 
 function moveTail([headRow, headCol], [tailRow, tailCol]) {
@@ -74,7 +61,7 @@ function moveTail([headRow, headCol], [tailRow, tailCol]) {
     }
 }
 
-function runRopeSimulation(input) {
+function runRopeSimulation(input, n) {
     input = parseInput(input)
     const commands = {
         "U": [-1, 0],
@@ -82,21 +69,22 @@ function runRopeSimulation(input) {
         "D": [1, 0],
         "L": [0, -1]
     };
-    let head = [0,0];
-    let tail = [0,0];
-    let seen = new Set([serialize(tail)]);
+    let knots = generateKnots(n);
+    let seen = new Set([serialize(knots[knots.length-1])]);
     for (let cmd of input) {
         let [move, num] = cmd.trim().split(" ");
         num = Number(num);
         for (let i = 0; i < num; i++) {
             const [row, col] = commands[move];
-            head[0] += row;
-            head[1] += col;
-            tail = moveTail(head, tail)
-            seen.add(serialize(tail))
+            knots[0][0] += row;
+            knots[0][1] += col;
+            for(let i = 0; i < knots.length-1; i++) {
+                knots[i+1] = moveTail(knots[i], knots[i+1])
+            }
+            seen.add(serialize(knots[knots.length-1]));
         }
     }
     return seen.size;
 }
 
-console.log(runRopeSimulation(input)); 
+console.log(runRopeSimulation(input, 2), runRopeSimulation(input, 10)); 
