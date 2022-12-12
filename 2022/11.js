@@ -2,47 +2,15 @@
 // starting items -> worry levels
 let { input } = require("./input/11")
 
-let test = `
-Monkey 0:
-  Starting items: 79, 98
-  Operation: new = old * 19
-  Test: divisible by 23
-    If true: throw to monkey 2
-    If false: throw to monkey 3
-
-Monkey 1:
-  Starting items: 54, 65, 75, 74
-  Operation: new = old + 6
-  Test: divisible by 19
-    If true: throw to monkey 2
-    If false: throw to monkey 0
-
-Monkey 2:
-  Starting items: 79, 60, 97
-  Operation: new = old * old
-  Test: divisible by 13
-    If true: throw to monkey 1
-    If false: throw to monkey 3
-
-Monkey 3:
-  Starting items: 74
-  Operation: new = old + 3
-  Test: divisible by 17
-    If true: throw to monkey 0
-    If false: throw to monkey 1
-`
-
+let temp = input;
 const COLON = ":";
 const SPACE = " ";
 const COMMA = ",";
 const EQUAL = "=";
 
-
 function setID(monkey) { return Number(monkey[0].split(SPACE)[1][0]); }
 
 function isOld(x) { return isNaN(x); }
-
-function getItemIndex(monkey, item) { return input[monkey].items.indexOf(item); }
 
 function getItems(monkey) {
     const list = monkey[1]
@@ -104,14 +72,15 @@ function operate(old, op, x) {
     return ops[op];
 }
 
-
-function inspectItems(monkey) {
+function inspectItems(monkey, product) {
     const { items } = monkey;
     const { op } = monkey;
+    const divisor = product ? 1 : 3;
     let count = 0;
     while(items.length !== 0) {
         const item = items.pop();
-        let newWorryLevel = Math.floor(operate(item, op[1], isOld(op[2]) ? item : op[2]) / 3);
+        let newWorryLevel = Math.floor(operate(item, op[1], isOld(op[2]) ? item : op[2]) / divisor);
+        if (product) newWorryLevel %= product;
         const monkeyTo = evalTest(monkey, newWorryLevel);
         throwTo(newWorryLevel, monkey.resultDest[monkeyTo]);
         count++;
@@ -123,12 +92,21 @@ function evalTest(monkey, newWorryLevel) {
     return Number(newWorryLevel % monkey.test === 0);
 }
 
-function simulateRounds(numRounds) {
-    let k = 0; let n = input.length;
+function getProductOfTests(monkeys) {
+    return monkeys.reduce((product, monkey) => product * monkey.test, 1);
+}
+
+function simulateRounds(numRounds, pt2) {
+    let k = 0; let n = input.length; let product;
     let inspections = Array.from(Array(n), () => 0);
+    
+    if (pt2) {
+        product = getProductOfTests(input);
+    };
+    
     for (let i = 0; i < numRounds; i++) {
         for (let monkey of input) {
-            inspections[(k++%n)] += inspectItems(monkey);
+            inspections[(k++%n)] += inspectItems(monkey, product);
         }
     }
     return inspections;
@@ -136,6 +114,11 @@ function simulateRounds(numRounds) {
 
 // Part 1
 input = parseInput(input);
-const result = simulateRounds(20).sort( (a, b) => b - a);
-console.log(result[0] * result[1])
+const part1Result = simulateRounds(20).sort((a, b) => b - a);
+console.log(part1Result[0] * part1Result[1])
 
+// part 2
+input = temp;
+input = parseInput(input);
+const part2Result = simulateRounds(10000, 1).sort((a, b) => b - a);
+console.log(part2Result[0] * part2Result[1])
