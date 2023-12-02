@@ -1,15 +1,9 @@
-use std::{ env, fs };
+use aoc::parse_input;
 
 fn main () {
     let input = parse_input("01");
     println!("{}", part_one(input.clone()));
     println!("{}", part_two(input.clone()));
-}
-
-fn parse_input(file: &str) -> String {
-    let cwd = env::current_dir().unwrap();
-    let filepath = cwd.join("inputs").join(file);
-    fs::read_to_string(filepath).unwrap()
 }
 
 fn part_one(input: String) -> i32 {
@@ -25,15 +19,13 @@ fn part_one(input: String) -> i32 {
             num.push(left.unwrap());
             num.push(right.unwrap());
         } else {
-            println!("{:?}", left);
             num.push(left.unwrap_or('0'));
             num.push(left.unwrap_or('0'));
         }
 
-        println!("num {}", num);
         sum += num.parse::<i32>().unwrap_or_default();
     }
-    return sum; 
+    sum
 }
 
 fn part_two(input: String) -> i32 {
@@ -49,7 +41,7 @@ fn part_two(input: String) -> i32 {
             .replace("seven", "s7n")
             .replace("eight", "e8t")
             .replace("nine", "n9e");
-            sum += part_one(new_line);
+        sum += part_one(new_line);
     }
     sum 
 }
