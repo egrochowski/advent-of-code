@@ -36,13 +36,13 @@ fn is_valid_game(line: &str) -> bool {
     let mut is_valid = true;
     line.split(";").for_each(|game| {
         re.captures_iter(game).for_each(|cap| {
-            let cubes = cap.get(1).unwrap().as_str().trim();
+            let cubes = parse_num(cap.get(1).unwrap().as_str().trim());
             let color = cap.get(2).unwrap().as_str().trim();
 
             match color { 
-                "red" => is_valid &= parse_num(cubes) <= MAX_RED,
-                "blue" => is_valid &= parse_num(cubes) <= MAX_BLUE,
-                "green" => is_valid &= parse_num(cubes) <= MAX_GREEN,
+                "red" => is_valid &= cubes <= MAX_RED,
+                "blue" => is_valid &= cubes <= MAX_BLUE,
+                "green" => is_valid &= cubes <= MAX_GREEN,
                 _ => ()
             };
         });
