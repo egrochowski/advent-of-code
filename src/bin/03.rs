@@ -54,21 +54,19 @@ fn is_special_char(ch: char) -> bool {
     ch != '.' && !ch.is_numeric() 
 }
 
-
 fn get_gear_ratio(grid: &mut Vec<Vec<char>>, row: usize, col: usize) -> i32 {
     let mut gear_ratio = 1;
     let mut adj_nums = 0;
-        let m_range = if row > 0 { row-1..row+2 } else { 0..2 };
-        let n_range = if col > 0 { col-1..col+2 } else { 0..col+2 };
-        for m in m_range.clone() {
-            for n in n_range.clone() {
-                if grid[m][n].is_numeric() {
-                    let num = get_num(grid, m, n).parse::<i32>().unwrap_or(1);
-                    gear_ratio *= num;
-                    adj_nums += 1; 
-                }
+    let m_range = if row > 0 { row-1..row+2 } else { 0..2 };
+    let n_range = if col > 0 { col-1..col+2 } else { 0..col+2 };
+    for m in m_range.clone() {
+        for n in n_range.clone() {
+            if grid[m][n].is_numeric() {
+                gear_ratio *= get_num(grid, m, n).parse::<i32>().unwrap_or(1);
+                adj_nums += 1; 
             }
         }
+    }
     if adj_nums == 2 { gear_ratio } else { 0 }
 }
 
@@ -79,10 +77,12 @@ fn get_num(grid: &mut Vec<Vec<char>>, row: usize, mut start: usize) -> String {
     while start > 0 && grid[row][start-1].is_numeric() {
         start -= 1;
     }
+
     while start < grid[row].len () && grid[row][start].is_numeric() {
         num.push(grid[row][start]);
         grid[row][start] = '.'; // Remove number from board
         start += 1;
     }
+
     num
 }
