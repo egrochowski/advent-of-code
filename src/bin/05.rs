@@ -1,7 +1,5 @@
 use aoc::parse_input;
 use core::ops::Range;
-use std::collections::HashSet;
-
 
 fn main () {
     let almanac = parse_input("05");
@@ -42,6 +40,9 @@ fn part_two(almanac: &str) -> u64 {
             for maps in mappings.clone() {
                 for ranges in maps.clone() {
                     let (dest, src) = ranges;
+                    if current_seed > src.start {
+                        continue;
+                    }
                     if src.contains(&current_seed) {
                         current_seed = current_seed - src.start + dest.start;
                         break;
@@ -101,20 +102,6 @@ fn parse_ranges(mapping: &str) -> (Range<u64>, Range<u64>) {
     let src  = mapping[1].parse::<u64>().unwrap(); 
     let len  = mapping[2].parse::<u64>().unwrap(); 
     (dest..dest+len, src..src+len)
-}
-
-fn has(mut left: u64, mut right: u64, n: u64) -> bool {
-    while left < right {
-        let mid = left + right / 2; 
-        if mid == n { 
-            return true; 
-        } else if mid < left {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    false
 }
 
 #[cfg(test)]
