@@ -1,8 +1,8 @@
-use aoc::parse_input;
+use aoc::read_file;
 use regex::Regex;
 
 fn main() {
-    let input = parse_input("02");
+    let input = read_file("02");
     println!("{}", part_one(&input.clone()));
     println!("{}", part_two(&input.clone()));
 }

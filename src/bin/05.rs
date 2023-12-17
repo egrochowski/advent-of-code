@@ -1,8 +1,8 @@
-use aoc::parse_input;
+use aoc::read_file;
 use core::ops::Range;
 
 fn main () {
-    let almanac = parse_input("05");
+    let almanac = read_file("05");
     println!("{}", part_one(&almanac.clone()));
     println!("{}", part_two(&almanac.clone()));
 

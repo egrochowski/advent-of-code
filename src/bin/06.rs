@@ -1,7 +1,7 @@
-use aoc::parse_input;
+use aoc::read_file;
 
 fn main() {
-    let paper = parse_input("06");
+    let paper = read_file("06");
     println!("{}", part_one(&paper.clone()));
     println!("{}", part_two(&paper.clone()));
 }

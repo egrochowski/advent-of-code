@@ -1,4 +1,4 @@
-use aoc::get_input;
+use aoc::read_file;
 use std::collections::HashMap;
 use counter::Counter;
 
@@ -15,7 +15,7 @@ enum Strengths {
 }
 
 fn main () {
-    let transactions = get_input("07");
+    let transactions = read_file("07");
     println!("{}", part_one(&transactions.clone()));
     println!("{}", part_two(&transactions.clone()));
 }

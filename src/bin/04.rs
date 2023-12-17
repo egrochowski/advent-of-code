@@ -1,9 +1,9 @@
-use aoc::parse_input;
+use aoc::read_file;
 use std::collections::{HashSet, HashMap};
 use regex::Regex;
 
 fn main() { 
-    let scratchcard = parse_input("04");
+    let scratchcard = read_file("04");
     println!("{}", part_one(&scratchcard.clone()));
     println!("{}", part_two(&scratchcard.clone()));
 }
